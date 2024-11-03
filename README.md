@@ -25,7 +25,7 @@
 ## 🛠️ 技术栈
 
 - [Next.js 15](https://nextjs.org/) - React 框架
-- [Tailwind CSS](https://tailwindcss.com/) - CSS 框架
+- [Tailwind CSS](https://tailwindcss.com/) - CSS ��架
 - [Reveal.js](https://revealjs.com/) - 演示框架
 - [TypeScript](https://www.typescriptlang.org/) - 类型安全
 - [Marked](https://marked.js.org/) - Markdown 解析
