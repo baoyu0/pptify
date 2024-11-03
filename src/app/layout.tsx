@@ -26,13 +26,13 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // 使用 headers() 在服务端获取路径
-  const headersList = headers();
+  // 使用 await 处理异步 headers
+  const headersList = await headers();
   const pathname = headersList.get('x-pathname') || '/';
   const isPreviewPage = pathname === '/preview';
 
