@@ -3,19 +3,115 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 255, 255, 255;
+  --foreground: 0, 0, 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root[class~="dark"] {
+  --background: 15, 23, 42;
+  --foreground: 255, 255, 255;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--foreground));
+  background: rgb(var(--background));
+}
+
+/* 代码高亮主题 */
+.hljs {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+.hljs-keyword,
+.hljs-operator {
+  color: #93c5fd;
+}
+
+.hljs-string {
+  color: #86efac;
+}
+
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.function_ {
+  color: #fde047;
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-number {
+  color: #f472b6;
+}
+
+.hljs-comment {
+  color: #64748b;
+}
+
+/* 自定义代码块样式 */
+pre {
+  @apply p-4 rounded-lg overflow-x-auto;
+}
+
+pre code {
+  @apply bg-transparent p-0;
+}
+
+.prose pre {
+  @apply bg-gray-900;
+}
+
+.prose code {
+  @apply text-sm;
+}
+
+/* Reveal.js 自定义样式 */
+.reveal {
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  text-transform: none;
+}
+
+.reveal pre {
+  box-shadow: none;
+  margin: 1em 0;
+}
+
+.reveal pre code {
+  padding: 1em;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.reveal ul,
+.reveal ol {
+  display: block;
+  text-align: left;
+}
+
+.reveal blockquote {
+  box-shadow: none;
+  border-left: 4px solid #666;
+  padding-left: 1em;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* 预览页独立样式 */
+html.preview-page {
+  background: #000;
+  color: #fff;
+}
+
+html.preview-page body {
+  background: transparent;
+  color: inherit;
 }
