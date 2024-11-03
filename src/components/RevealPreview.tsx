@@ -8,15 +8,6 @@ import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 // 导入 Reveal.js 的基础样式
 import 'reveal.js/dist/reveal.css';
 
-// 导入代码高亮
-import 'reveal.js/plugin/highlight/monokai.css';
-
-// 导入插件
-import RevealHighlight from 'reveal.js/plugin/highlight/highlight';
-import RevealNotes from 'reveal.js/plugin/notes/notes';
-import RevealZoom from 'reveal.js/plugin/zoom/zoom';
-import RevealMarkdown from 'reveal.js/plugin/markdown/markdown';
-
 // 导入所有主题
 import 'reveal.js/dist/theme/black.css';
 import 'reveal.js/dist/theme/white.css';
@@ -30,19 +21,25 @@ import 'reveal.js/dist/theme/solarized.css';
 import 'reveal.js/dist/theme/blood.css';
 import 'reveal.js/dist/theme/moon.css';
 
-// 修改主题选项
+// 导入插件
+import RevealHighlight from 'reveal.js/plugin/highlight/highlight';
+import RevealNotes from 'reveal.js/plugin/notes/notes';
+import RevealZoom from 'reveal.js/plugin/zoom/zoom';
+import RevealMarkdown from 'reveal.js/plugin/markdown/markdown';
+
+// 定义主题选项
 const THEMES = [
-  { id: 'white', name: '简约白', path: 'white', background: 'bg-white' },
-  { id: 'black', name: '深邃黑', path: 'black', background: 'bg-black' },
-  { id: 'league', name: '联盟', path: 'league', background: 'bg-gray-900' },
-  { id: 'beige', name: '米色', path: 'beige', background: 'bg-amber-50' },
-  { id: 'sky', name: '天空', path: 'sky', background: 'bg-sky-100' },
-  { id: 'night', name: '夜晚', path: 'night', background: 'bg-slate-900' },
-  { id: 'serif', name: '衬线', path: 'serif', background: 'bg-gray-50' },
-  { id: 'simple', name: '简单', path: 'simple', background: 'bg-white' },
-  { id: 'solarized', name: '日光', path: 'solarized', background: 'bg-amber-100' },
-  { id: 'blood', name: '血色', path: 'blood', background: 'bg-red-900' },
-  { id: 'moon', name: '月光', path: 'moon', background: 'bg-gray-800' }
+  { id: 'black', name: '深邃黑', path: 'black' },
+  { id: 'white', name: '简约白', path: 'white' },
+  { id: 'league', name: '联盟', path: 'league' },
+  { id: 'beige', name: '米色', path: 'beige' },
+  { id: 'sky', name: '天空', path: 'sky' },
+  { id: 'night', name: '夜晚', path: 'night' },
+  { id: 'serif', name: '衬线', path: 'serif' },
+  { id: 'simple', name: '简单', path: 'simple' },
+  { id: 'solarized', name: '日光', path: 'solarized' },
+  { id: 'blood', name: '血色', path: 'blood' },
+  { id: 'moon', name: '月光', path: 'moon' }
 ];
 
 // 定义过渡效果选项
@@ -220,12 +217,6 @@ export default function RevealPreview({ slides }: RevealPreviewProps) {
         // 更新 Reveal.js 的主题
         document.documentElement.dataset.theme = theme.path;
         revealRef.current.configure({ theme: theme.path });
-        
-        // 更新背景颜色
-        const deck = document.querySelector('.reveal') as HTMLElement;
-        if (deck) {
-          deck.className = `reveal h-full transition-colors duration-300 ${theme.background}`;
-        }
         
         console.log('主题切换成功');
       }
