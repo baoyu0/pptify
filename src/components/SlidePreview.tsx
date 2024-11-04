@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Slide } from '@/lib/markdown';
 
 interface SlidePreviewProps {
@@ -9,36 +9,29 @@ interface SlidePreviewProps {
 
 export function SlidePreview({ slides }: SlidePreviewProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const handlePrevSlide = () => {
+  const handlePrevSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
-  };
+  }, []);
 
-  const handleNextSlide = () => {
+  const handleNextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev < slides.length - 1 ? prev + 1 : prev));
-  };
+  }, [slides.length]);
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
       handlePrevSlide();
     } else if (e.key === 'ArrowRight') {
       handleNextSlide();
-    } else if (e.key === 'Escape') {
-      setIsFullscreen(false);
     }
-  };
-
-  const handleFullscreen = () => {
-    window.open('/preview', '_blank', 'fullscreen=yes');
-  };
+  }, [handlePrevSlide, handleNextSlide]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [handleKeyDown]);
 
   if (!slides.length) return null;
 
@@ -66,12 +59,6 @@ export function SlidePreview({ slides }: SlidePreviewProps) {
             className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
           >
             下一页
-          </button>
-          <button
-            onClick={handleFullscreen}
-            className="px-4 py-2 bg-green-500 text-white rounded"
-          >
-            全屏预览
           </button>
         </div>
       </div>

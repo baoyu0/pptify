@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import Reveal from 'reveal.js';
 import type { Slide } from '@/lib/markdown';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
+import type { RevealState } from 'reveal.js';
 
 // 导入 Reveal.js 的基础样式
 import 'reveal.js/dist/reveal.css';
@@ -186,7 +187,7 @@ const CUSTOM_STYLES = `
 
 export default function RevealPreview({ slides }: RevealPreviewProps) {
   const deckRef = useRef<HTMLDivElement>(null);
-  const revealRef = useRef<Reveal | null>(null);
+  const revealRef = useRef<typeof Reveal | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [currentTheme, setCurrentTheme] = useState('white');
   const [transition, setTransition] = useState('slide');
@@ -216,7 +217,10 @@ export default function RevealPreview({ slides }: RevealPreviewProps) {
       if (revealRef.current) {
         // 更新 Reveal.js 的主题
         document.documentElement.dataset.theme = theme.path;
-        revealRef.current.configure({ theme: theme.path });
+        // 使用 getConfig() 和 setConfig() 方法
+        const config = revealRef.current.getConfig();
+        revealRef.current.setConfig({ ...config, theme: theme.path });
+        revealRef.current.sync();
         
         console.log('主题切换成功');
       }
@@ -315,7 +319,7 @@ export default function RevealPreview({ slides }: RevealPreviewProps) {
     };
 
     initReveal();
-  }, [transition]); // 只依赖 transition
+  }, [transition, currentTheme]); // 添加 currentTheme 到依赖数组
 
   return (
     <div className={`fixed inset-0 overflow-hidden ${THEMES.find(t => t.id === currentTheme)?.background || 'bg-black'}`}>

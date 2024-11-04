@@ -10,7 +10,7 @@ export async function GET() {
         'Content-Type': 'text/markdown',
       },
     });
-  } catch (error) {
+  } catch {
     return new Response('Error loading demo file', { status: 500 });
   }
 } 

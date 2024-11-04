@@ -2,7 +2,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { headers } from 'next/headers';
 import { Metadata } from 'next';
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,22 +25,13 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
 };
 
-export default async function RootLayout({
+export const dynamic = 'force-dynamic';
+
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // 使用 await 处理异步 headers
-  const headersList = await headers();
-  const pathname = headersList.get('x-pathname') || '/';
-  const isPreviewPage = pathname === '/preview';
-
-  // 预览页使用独立布局
-  if (isPreviewPage) {
-    return children;
-  }
-
-  // 主页使用主题切换
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>

@@ -6,19 +6,80 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import { visit } from 'unist-util-visit';
+import type { Node } from 'unist';
 
 export interface Slide {
   content: string;
   raw: string;
 }
 
+// 添加具体的类型定义
+interface YamlFrontmatter {
+  title?: string;
+  description?: string;
+  author?: string;
+  date?: string;
+  [key: string]: unknown;
+}
+
+// 移除 yaml 导入
+// import { parse as parseYaml } from 'yaml';
+
+// 使用具体类型替代 any
+export function parseYamlFrontmatter(content: string): YamlFrontmatter {
+  try {
+    // 匹配 YAML 前置内容
+    const match = content.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
+    
+    if (!match) {
+      return {};
+    }
+
+    // 提取 YAML 内容并尝试解析
+    const yamlContent = match[1];
+    
+    try {
+      // 尝试作为 JSON 解析
+      const parsed = JSON.parse(`{${yamlContent}}`);
+      return parsed as YamlFrontmatter;
+    } catch {
+      // 如果 JSON 解析失败，使用简单的键值对解析
+      const parsed: YamlFrontmatter = {};
+      const lines = yamlContent.split('\n');
+      
+      for (const line of lines) {
+        const [key, ...values] = line.split(':').map(s => s.trim());
+        if (key && values.length > 0) {
+          parsed[key] = values.join(':');
+        }
+      }
+      
+      return parsed;
+    }
+  } catch (error) {
+    console.error('解析 YAML 前置内容失败:', error);
+    return {};
+  }
+}
+
+// 定义 rehype 节点类型
+interface RehypeNode extends Node {
+  tagName?: string;
+  properties?: {
+    className?: string[];
+    [key: string]: unknown;
+  };
+  children?: RehypeNode[];
+}
+
 // 自定义插件：处理代码块的语言
 function rehypeCodeLanguage() {
-  return (tree: any) => {
-    visit(tree, 'element', (node) => {
-      if (node.tagName === 'pre' && node.children[0]?.tagName === 'code') {
-        const className = node.children[0].properties.className || [];
-        const language = className[0]?.replace('language-', '') || 'plaintext';
+  return (tree: RehypeNode) => {
+    visit(tree, 'element', (node: RehypeNode) => {
+      if (node.tagName === 'pre' && node.children?.[0]?.tagName === 'code') {
+        const className = node.children[0].properties?.className || [];
+        const language = (className[0] as string)?.replace('language-', '') || 'plaintext';
+        node.properties = node.properties || {};
         node.properties.className = [
           ...(node.properties.className || []),
           'relative',
